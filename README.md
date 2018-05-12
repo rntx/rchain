@@ -11,8 +11,11 @@ The open-source RChain project is building a decentralized, economic, censorship
 
 Pre-release versions of the RChain software are now available. We plan to launch the full platform in Q4 of 2018.
 
+__Note__ Successfully building from source requires attending to all of the prerequisites shown below. When users experience errors, it is typically related to failure to assure all prerequisites are met. Work is in progress to improve this experience.
+
 ### Running from Docker
-Visit the [RChain Docker storefront](https://store.docker.com/profiles/rchain) for the most recent pre-release versions of the RChain software.
+Assuming you have Docker running on your system, use the following pull command to run the latest version of RNode in Docker
+'docker pull rchain/rnode:latest`
 
 ### Building and running from source
 #### Prerequisites
@@ -28,6 +31,21 @@ Visit the [RChain Docker storefront](https://store.docker.com/profiles/rchain) f
 Building some of the subprojects is just a matter of `sbt compile`, however some (like `rholang` or `crypto`) require extra steps to build. See README.md of each subproject for details.
 
 Once you can build each subproject individually, run `sbt node/assembly` to build an executable. The assembled jar will be available under `./node/target/scala-2.12/rnode-assembly-x.y.z.jar`
+
+Example
+```scala
+sbt:rchain> node/assembly
+[info] Including: JLex.jar
+[info] Including: log4s_2.12-1.4.0.jar
+[info] Including: java-cup-11b-runtime.jar
+
+(...)
+
+[info] SHA-1: bd4471642bb340c8b1fc0571fc614902c5bafbb2
+[info] Packaging /Users/rabbit/projects/rchain/node/target/scala-2.12/rnode-assembly-0.1.3.jar ...
+[info] Done packaging.
+[success] Total time: 25 s, completed Mar 26, 2018 3:36:09 PM
+```
 
 ## Information for developers
 Assure prerequisites shown above are met.
@@ -174,6 +192,16 @@ Invoking the above Docker image is simple enough:
 15:49:26.974 [main] DEBUG p2p - connect(): Connecting to #{PeerNode c12882b563fa47c9af297ce952ef7d94}
 [...]
 ```
+In order to use both the peer-to-peer network and REPL cabailities of the node, you must run more than one Docker Rnode on the same host, the containers need to be connected to one user-defined network bridge:
+
+```bash
+> docker network create rnode-net
+
+> docker run -dit --name rnode0 --network rnode-net coop.rchain/rnode:latest -s
+
+> docker run -it --name rnode-repl --network rnode-net coop.rchain/rnode:latest --grpc-host rnode0 -r
+```
+
 Each scoped build is as similar to the original, per-project build process as possible, so assemblies should be produced in the same way as before:
 ```
 <computer:~/src/rchain (dev)> sbt "project rholang" assembly
@@ -195,14 +223,6 @@ compiled rholang/examples/hello_world_again.rho to rholang/examples/hello_world_
 
 The `comm` subproject contains code for network related operations for RChain.
 
-The network layer is the lowest level component in the architecture and it
-is featured in our **Node.Hello (v0.1) release**. The simplest way to get
-started is with [docker][]: `docker run -ti rchain/rchain-comm`. For other options,
-see [comm/README.md][cr].
-
-[docker]: https://store.docker.com/community/images/rchain/rchain-comm
-[cr]: https://github.com/rchain/rchain/tree/master/comm
-
 ### Rholang
 
 The `rholang` subproject contains compiler related code for the Rholang language.
@@ -218,6 +238,12 @@ The `rosette` subproject contains code for a low level virtual machine for RChai
 ### Rspace
 
 The `rspace` subproject contains code related to the key-value storage of the RChain blockchain.
+
+
+## Caveats and filing issues
+
+### Caveats
+During this pre-release phase of the RChain software, there are some [known issues](https://rchain.atlassian.net/wiki/spaces/CORE/pages/428376244/RChain+software+unresolved+bugs+and+known+issues). 
 
 ### Filing Issues
 

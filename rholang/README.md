@@ -25,7 +25,7 @@ Currently we have a working interpreter for the language. It should be considere
 			exec /usr/bin/java java_cup.Main "$@"
 			```
     * JFlex - install using apt 
-    * BNFC - must be built from [git](https://github.com/BNFC/bnfc) b0252e5f666ed67a65b6e986748eccbfe802bc17 or later
+    * BNFC - MUST be built from [git](https://github.com/BNFC/bnfc) b0252e5f666ed67a65b6e986748eccbfe802bc17 or later. If you use `cabal install` you will need to add your BNFC binary to the PATH.
     * Scala
 4. Run `sbt rholang/bnfc:generate` to generate the lexer/parser. Re-run whenever you modify the grammar
 5. Run `sbt rholang/compile` to compile classes
@@ -48,7 +48,6 @@ In general:
   * 0-arity send and receive is currently broken.
   * Matching is incomplete. We won't currently destructure receives or matches. We will match expressions.
   * We don't pre-evaluate match cases. So matching 7 + 8 as a pattern currently doesn't work. Instead, you must match against 15.
-  * There is work in progress to support stdout and stderr, but it hasn't landed yet.
   * There is also work to support native functions. It hasn't landed yet.
 ### The good
-Several working examples have been included in the examples/0.2 directory, and the tests in tests/mercury-tut also work. If you run into something that doesn't work, check the bugtracker to see if it's a known issue, and if not, feel free to file a bug. We want rholang to be a useful programming environment.
+Several working examples have been included in the examples directory, and the examples in the [Rholang tutorial](https://github.com/rchain/rchain/blob/master/docs/rholang/rholangtut-0.2.md) also work. If you run into something that doesn't work, check the bugtracker to see if it's a known issue, and if not, feel free to [file a bug](https://rchain.atlassian.net/secure/CreateIssueDetails!init.jspa?pid=10105&issuetype=10103&versions=10012&components=10004&assignee=medha&summary=issue+created%20via+link). We want Rholang to be a useful programming environment.
